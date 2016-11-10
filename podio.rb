@@ -9,9 +9,6 @@ module Podio
                   :client_id => args.fetch(:client_id),
                   :client_secret => args.fetch(:client_secret)}
     return response.body["access_token"]
-    # Podio.setup(:api_key => args.fetch(:client_id), :api_secret => args.fetch(:client_secret))
-    # Podio.client.authenticate_with_credentials(args.fetch(:username), args.fetch(:password))
-    byebug
   end
 
   def self.get_items(token)
