@@ -6,7 +6,7 @@ module View
   def self.welcome
     puts "~~~~~~~~"
     puts "Welcome to Austin's Alignment Assignment!"
-    puts "~~~~~~~~\n"
+    puts "\n~~~~~~~~\n"
     self.get_info
   end
 
