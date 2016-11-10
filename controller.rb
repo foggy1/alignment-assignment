@@ -7,7 +7,6 @@ class Controller
   end
 
   def run
-    p @client_id
-    p @client_secret
+    @view.test(@client_id, @client_secret)
   end
 end
