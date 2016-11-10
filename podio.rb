@@ -1,4 +1,4 @@
-module Authorization
+module Podio
 
   def self.get_token(args)
     response = Unirest.post "https://podio.com/oauth/token",
