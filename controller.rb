@@ -13,5 +13,6 @@ class Controller
                      client_secret: @client_secret,
                      username: @username,
                      password: @password})
+    @auth.get_items(@access_token)
   end
 end

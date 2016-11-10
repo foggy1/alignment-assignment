@@ -5,6 +5,7 @@ require_relative 'auth'
 require 'io/console'
 require 'byebug'
 require 'unirest'
+require 'podio'
 
 
 Controller.new(view: View, 
