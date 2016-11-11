@@ -9,8 +9,7 @@ module PodioApi
 
   # Retrieves items from the Meetings app
   def self.get_items
-    items = Podio::Item.find_all(17172422, {"sort_desc": true})
-    byebug
+    items = Podio::Item.find_all(17172422)
   end
 
   # Create new items on the second board with info scrubbed from first.

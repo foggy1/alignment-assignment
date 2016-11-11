@@ -9,6 +9,7 @@ module Parser
   # Checks field label and retrieves its associated value
   # These are made into key value pairs
   def self.scrub(scrubable)
+    byebug
     scrubbed = scrubable["items"].map do |item|
       clean_args = {}
       item["fields"].each do |field|
