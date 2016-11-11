@@ -15,8 +15,7 @@ class Controller
                      client_secret: @client_secret,
                      username: @username,
                      password: @password})
-    @podio_api.testIt()
-    # ugly_items = @podio.get_items(@access_token)
+    @podio_api.get_items
     # @items = @parser.parse(ugly_items)
     # @podio.post_tasks({items: @items,
     #                    token: @access_token})
