@@ -19,4 +19,10 @@ module Podio
                parameters:{:sort_desc => true}
     return response.body
   end
+
+  def self.post_tasks(items)
+    response = Unirest.post "https://api.podio.com/item/app/17172424/",
+                headers:{"Authorization" => "OAuth2 #{token}"},
+                parameters:{:silent => true}
+  end
 end
