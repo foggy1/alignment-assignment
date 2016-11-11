@@ -1,5 +1,6 @@
 module Podio
 
+  # Retrieves access token
   def self.get_token(args)
     response = Unirest.post "https://podio.com/oauth/token",
                  parameters:{:grant_type => "password",
@@ -11,6 +12,7 @@ module Podio
     return response.body["access_token"]
   end
 
+  # Retrieves items from the Meetings app
   def self.get_items(token)
     response = Unirest.post "https://api.podio.com/item/app/17172422/filter/",
                headers:{"Authorization" => "OAuth2 #{token}"},

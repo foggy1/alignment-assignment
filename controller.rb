@@ -5,6 +5,7 @@ class Controller
     @client_secret = args.fetch(:client_secret)
     @podio = args.fetch(:podio)
     @parser = args.fetch(:parser)
+    @items = []
     run
   end
 
@@ -15,6 +16,6 @@ class Controller
                      username: @username,
                      password: @password})
     ugly_items = @podio.get_items(@access_token)
-    @items = @parser.scrub(ugly_items)
+    @items = @parser.parse(ugly_items)
   end
 end
