@@ -3,40 +3,40 @@ module Parser
   # Namespaces and chains the parsing methods after initial API call
   def self.parse(scrubable)
     scrubbed = self.scrub(scrubable)
-    byebug
-    confirmed = self.dates_confirmed(scrubbed)
-    unique = self.uniqify(confirmed)
+    self.dates_confirmed(scrubbed)
   end
 
+  # Checks field label and retrieves its associated value
+  # These are made into key value pairs
   def self.scrub(scrubable)
-    scrubable["items"].map do |item|
+    scrubbed = scrubable["items"].map do |item|
       clean_args = {}
       item["fields"].each do |field|
-        clean_args[field["label"]] = "test"
+        if field["label"] == "Meeting Title" ||
+           field["label"] == "Topic Summary"
+          clean_args[field["label"]] = field["values"].first["value"].gsub(/<\/?[^>]*>/, "")
+        elsif field["label"] == "Meeting Type" || 
+              field["label"] == "Priority" ||
+              field["label"] == "Scheduling Status" ||
+              field["label"] == "Campaign"
+          clean_args[field["label"]] = field["values"].first["value"]["text"]
+        elsif field["label"] == "Time & Date of Meeting"
+          clean_args[field["label"]] = field["values"].first["start_date_utc"]
+        elsif field["label"] == "Location"
+          clean_args[field["label"]] = field["values"].first["formatted"]
+          clean_args["lat"] = field["values"].first["lat"]
+          clean_args["lng"] = field["values"].first["lng"]
+        end
       end
-      return clean_args
+      clean_args
     end
-  end
-  # Returns only those items with Date confirmed status
-  def self.dates_confirmed(scrubable)
-    scrubable["items"].select do |item| 
-      item["fields"].any? do |field| 
-        field["label"] == "Scheduling Status" && field["values"].first["value"]["text"] == "Date confirmed"
-      end
-    end
+    # Remove duplicates
+    scrubbed.uniq
   end
 
-  # Rejects items with repeat title and datetimes
-  def self.uniqify(scrubable)
-    # check_duplicates = []
-    # scrubable.reject do |item|
-    #   item["fields"].any? do |field|
-    #     pair = []
-    #     if check_duplicates.empty? && field["label"] == "Meeting Title" || 
-    #       field["label"] == "Time & Date of Meeting"
-    #     end
-    #   end
-    # end
+  # Returns only those items with Date confirmed status
+  def self.dates_confirmed(scrubbed)
+    scrubbed.select{ |item| item["Scheduling Status"] == "Date confirmed" }
   end
 
 end

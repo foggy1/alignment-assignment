@@ -5,6 +5,7 @@ class Controller
     @client_secret = args.fetch(:client_secret)
     @podio = args.fetch(:podio)
     @parser = args.fetch(:parser)
+    @items = []
     run
   end
 
