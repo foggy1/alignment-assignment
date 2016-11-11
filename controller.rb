@@ -17,6 +17,7 @@ class Controller
                      password: @password})
     ugly_items = @podio.get_items(@access_token)
     @items = @parser.parse(ugly_items)
-    
+    @podio.post_tasks({items: @items,
+                       token: @access_token})
   end
 end

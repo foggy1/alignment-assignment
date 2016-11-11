@@ -20,9 +20,13 @@ module Podio
     return response.body
   end
 
-  def self.post_tasks(items)
+  # Create new items on the second board with info scrubbed from first.
+  # Receive those item_id's on callback.  Use them as ref on task creation.
+  def self.post_tasks(args)
     response = Unirest.post "https://api.podio.com/item/app/17172424/",
-                headers:{"Authorization" => "OAuth2 #{token}"},
-                parameters:{:silent => true}
+                headers:{"Authorization" => "OAuth2 #{args.fetch(:token)}", 
+                         "Accept" => "application/json" },
+                parameters:{:fields => args.fetch(:items).first}.to_json
+    byebug
   end
 end
