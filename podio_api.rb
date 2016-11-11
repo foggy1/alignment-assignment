@@ -1,15 +1,18 @@
-module Podio
+module PodioApi
 
   # Retrieves access token
-  def self.get_token(args)
-    response = Unirest.post "https://podio.com/oauth/token",
-                 parameters:{:grant_type => "password",
-                  :redirect_uri => "localhost:4567",
-                  :username => args.fetch(:username),
-                  :password => args.fetch(:password),
-                  :client_id => args.fetch(:client_id),
-                  :client_secret => args.fetch(:client_secret)}
-    return response.body["access_token"]
+  def self.auth(args)
+    Podio.setup(:api_key => args.fetch(:client_id), :api_secret => args.fetch(:client_secret))
+    Podio.client.authenticate_with_credentials(args.fetch(:username), args.fetch(:password))
+  end
+
+  def self.testIt
+    my_orgs = Podio::Organization.find_all
+
+    my_orgs.each do |org|
+      puts org.name
+      puts org.url
+    end
   end
 
   # Retrieves items from the Meetings app
