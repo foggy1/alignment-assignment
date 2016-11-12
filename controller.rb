@@ -17,5 +17,6 @@ class Controller
                      password: @password})
     ugly_items = @podio.get_items(@access_token)
     @items = @parser.parse(ugly_items)
+    @podio.make_items(@items, @access_token)
   end
 end

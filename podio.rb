@@ -19,4 +19,13 @@ module Podio
                parameters:{:sort_desc => true}
     return response.body
   end
+
+  def self.make_items(items, token)
+    test_item = items.first
+    response = Unirest.post "https://api.podio.com/item/app/17172424/",
+                headers:{"Authorization" => "OAuth2 #{token}",
+                          "Content-Type" => "text/json"},
+                parameters:{"fields" => test_item}.to_json
+    byebug
+  end
 end

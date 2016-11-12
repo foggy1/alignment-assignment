@@ -6,6 +6,7 @@ require_relative 'parser'
 require 'io/console'
 require 'byebug'
 require 'unirest'
+require 'json'
 
 
 Controller.new(view: View, 
