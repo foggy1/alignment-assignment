@@ -10,22 +10,12 @@ module Parser
   def self.scrub(scrubable)
     scrubbed = scrubable["items"].map do |item|
       clean_args = {}
-      item["fields"].each do |field|
-        id = field["label"].downcase.gsub(" ", "_")
-        if field["label"] == "Meeting Title" ||
-           field["label"] == "Topic Summary"
-          clean_args[id] = [field["values"].first["value"].gsub(/<\/?[^>]*>/, "")]
-        elsif field["label"] == "Meeting Type" || 
-              field["label"] == "Priority" ||
-              field["label"] == "Scheduling Status" ||
-              field["label"] == "Campaign"
-          clean_args[id] = [field["values"].first["value"]["text"]]
-        elsif field["label"] == "Time & Date of Meeting"
-          clean_args[id] = [field["values"].first["start_date_utc"]]
-        elsif field["label"] == "Location"
-          clean_args[id] = [field["values"].first["formatted"]]
-          clean_args["lat"] = field["values"].first["lat"]
-          clean_args["lng"] = field["values"].first["lng"]
+      clean_args["fields"] = {}
+      item["fields"].each do |field| 
+        if field["values"].first["value"]
+          clean_args["fields"][field["external_id"]] = field["values"].first["value"]
+        else
+          clean_args["fields"][field["external_id"]] = field["values"]
         end
       end
       clean_args
@@ -36,11 +26,7 @@ module Parser
 
   # Returns only those items with Date confirmed status
   def self.dates_confirmed(scrubbed)
-    scrubbed.select{ |item| item["scheduling_status"].first == "Date confirmed" }
+    scrubbed.select{ |item| item["fields"]["status"]["text"] == "Date confirmed" }
   end
-
-  # def self.scrub_field(field)
-  #       field.delete_if{ |key, value| key == "field_id" || key == "external_id" || key == "values"}
-  # end
 
 end

@@ -22,18 +22,18 @@ module Podio
   end
 
   def self.make_items(items, token)
-    params = {"fields" => items.first}
-    response = Unirest.post "https://api.podio.com/item/app/17172424/",
-                headers:{"Authorization" => "OAuth2 #{token}",
-                          "Content-Type" => "application/json"},
-                parameters:params.to_json
-    byebug
+    external_id = 504021412
+    item_ids = []
+    items.each do |item|
+      item["external_id"] = "share_#{external_id}"
+      response = Unirest.post "https://api.podio.com/item/app/17172424/",
+                  headers:{"Authorization" => "OAuth2 #{token}",
+                            "Content-Type" => "application/json"},
+                  parameters:item.to_json
+      item_ids << response.body
+      external_id += 1
+    end
+    item_ids
   end
 
-  # def self.make_field(field)
-  #   response = Unirest.post "https://api.podio.com/app/17172424/field/",
-  #     headers:{"Authorization" => "OAuth2 #{@@token}",
-  #     "Content-Type" => "application/json"},
-  #     parameters: {"type"=>"text", "label"=>"Meeting Title", "config"=>{"settings"=>{"format"=>"html", "size"=>"large"}, "mapping"=>nil, "label"=>"Meeting Title"}}.to_json
-  # end
 end
