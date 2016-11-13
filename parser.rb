@@ -11,11 +11,13 @@ module Parser
     scrubbed = scrubable["items"].map do |item|
       clean_args = {}
       clean_args["fields"] = {}
-      item["fields"].each do |field| 
-        if field["values"].first["value"].respond_to?(:key)
+      item["fields"].each do |field|
+        if field["values"].first["value"].respond_to?(:downcase) || field["values"].first["value"].respond_to?(:round)
           clean_args["fields"][field["external_id"]] = field["values"].first["value"]
+        elsif field["values"].first["end"]
+          clean_args["fields"][field["external_id"]] = field["values"].first
         else
-          clean_args["fields"][field["external_id"]] = field["values"]
+          clean_args["fields"][field["external_id"]] = field["values"].first["value"]["text"]
         end
       end
       clean_args
@@ -26,7 +28,7 @@ module Parser
 
   # Returns only those items with Date confirmed status
   def self.dates_confirmed(scrubbed)
-    scrubbed.select{ |item| item["fields"]["status"]["text"] == "Date confirmed" }
+    scrubbed.select{ |item| item["fields"]["status"] == "Date confirmed" }
   end
 
 end

@@ -18,6 +18,5 @@ class Controller
     ugly_items = @podio.get_items(@access_token)
     @items = @parser.parse(ugly_items)
     @new_item_ids = @podio.make_items(@items, @access_token)
-    byebug
   end
 end
