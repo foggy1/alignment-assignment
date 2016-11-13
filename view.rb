@@ -6,7 +6,7 @@ module View
   def self.welcome
     puts "~~~~~~~~"
     puts "Welcome to Austin's Alignment Assignment!"
-    puts "\n~~~~~~~~\n"
+    puts "~~~~~~~~\n"
     self.get_info
   end
 
@@ -15,7 +15,11 @@ module View
     username = gets.chomp
     print "Please enter your Podio password: "
     password = STDIN.noecho(&:gets).chomp
-    puts "~~~~~~~~"
+    puts "\n~~~~~~~~"
     return [username, password]
+  end
+
+  def self.nothing_new
+    puts "All items have already been copied over!"
   end
 end

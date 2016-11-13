@@ -5,6 +5,9 @@ class Controller
     @client_secret = args.fetch(:client_secret)
     @podio = args.fetch(:podio)
     @parser = args.fetch(:parser)
+    @meeting_app_1 = args.fetch(:meeting_app_1)
+    @meeting_app_2 = args.fetch(:meeting_app_2)
+    @app_ids = [args.fetch(:meeting_app_1), args.fetch(:meeting_app_2)]
     @items = []
     run
   end
@@ -15,8 +18,11 @@ class Controller
                      client_secret: @client_secret,
                      username: @username,
                      password: @password})
-    ugly_items = @podio.get_items(@access_token)
-    @items = @parser.parse(ugly_items)
-    @new_item_ids = @podio.make_items(@items, @access_token)
+    ugly_items = @app_ids.map{ |app_id| @podio.get_items(@access_token, app_id) }
+    @app_one_items, @app_two_items = ugly_items.map { |scrubable| @parser.parse(scrubable) }
+    @new_item_ids = @podio.make_items(@app_one_items.length, 
+                                      @app_one_items - @app_two_items, 
+                                      @access_token)
+    @view.nothing_new unless @new_item_ids
   end
 end
