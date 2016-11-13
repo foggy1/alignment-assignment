@@ -12,7 +12,7 @@ module Parser
       clean_args = {}
       clean_args["fields"] = {}
       item["fields"].each do |field| 
-        if field["values"].first["value"]
+        if field["values"].first["value"].respond_to?(:key)
           clean_args["fields"][field["external_id"]] = field["values"].first["value"]
         else
           clean_args["fields"][field["external_id"]] = field["values"]
