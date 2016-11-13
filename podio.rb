@@ -9,6 +9,7 @@ module Podio
                   :password => args.fetch(:password),
                   :client_id => args.fetch(:client_id),
                   :client_secret => args.fetch(:client_secret)}
+    @@token = response.body["access_token"]
     return response.body["access_token"]
   end
 
@@ -21,11 +22,18 @@ module Podio
   end
 
   def self.make_items(items, token)
-    test_item = items.first
+    params = {"fields" => items.first}
     response = Unirest.post "https://api.podio.com/item/app/17172424/",
                 headers:{"Authorization" => "OAuth2 #{token}",
-                          "Content-Type" => "text/json"},
-                parameters:{"fields" => test_item}.to_json
+                          "Content-Type" => "application/json"},
+                parameters:params.to_json
     byebug
   end
+
+  # def self.make_field(field)
+  #   response = Unirest.post "https://api.podio.com/app/17172424/field/",
+  #     headers:{"Authorization" => "OAuth2 #{@@token}",
+  #     "Content-Type" => "application/json"},
+  #     parameters: {"type"=>"text", "label"=>"Meeting Title", "config"=>{"settings"=>{"format"=>"html", "size"=>"large"}, "mapping"=>nil, "label"=>"Meeting Title"}}.to_json
+  # end
 end
