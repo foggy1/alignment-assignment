@@ -7,6 +7,7 @@ require 'io/console'
 require 'byebug'
 require 'unirest'
 require 'json'
+require 'date'
 
 
 Controller.new(view: View, 
