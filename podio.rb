@@ -22,7 +22,7 @@ module Podio
   end
 
   def self.make_items(count, items, token)
-    return false unless items
+    return false unless items.length > 0
     external_id = 504021412
     external_id += count
     item_ids = []
@@ -38,11 +38,5 @@ module Podio
     item_ids
   end
 
-  # Retrieve and scrub the current items in meeting app 2.
-  # Take the difference of those items and those pulled from meeting app 1 to see if they are already present or some need to be added.
-  def self.reject_repeats(token, items, app_id)
-    current_items = Parser.parse(self.get_items(token, app_id))
-    items - current_items == [] ? (return false) : (return items - current_items)
-  end
 
 end
