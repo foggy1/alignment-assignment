@@ -12,5 +12,7 @@ require 'json'
 Controller.new(view: View, 
                podio: Podio,
                parser: Parser,
+               meeting_app_1: 17172422,
+               meeting_app_2: 17172424,
                client_id: ENV["client_id"],
                client_secret: ENV["client_secret"])

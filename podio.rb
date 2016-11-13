@@ -14,15 +14,17 @@ module Podio
   end
 
   # Retrieves items from the Meetings app
-  def self.get_items(token)
-    response = Unirest.post "https://api.podio.com/item/app/17172422/filter/",
+  def self.get_items(token, app_id)
+    response = Unirest.post "https://api.podio.com/item/app/#{app_id}/filter/",
                headers:{"Authorization" => "OAuth2 #{token}"},
                parameters:{:sort_desc => true}
     return response.body
   end
 
-  def self.make_items(items, token)
+  def self.make_items(count, items, token)
+    return false unless items
     external_id = 504021412
+    external_id += count
     item_ids = []
     items.each do |item|
       item["external_id"] = "share_#{external_id}"
@@ -34,6 +36,13 @@ module Podio
       external_id += 1
     end
     item_ids
+  end
+
+  # Retrieve and scrub the current items in meeting app 2.
+  # Take the difference of those items and those pulled from meeting app 1 to see if they are already present or some need to be added.
+  def self.reject_repeats(token, items, app_id)
+    current_items = Parser.parse(self.get_items(token, app_id))
+    items - current_items == [] ? (return false) : (return items - current_items)
   end
 
 end
