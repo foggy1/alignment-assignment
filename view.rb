@@ -1,8 +1,6 @@
 module View
-  # def self.test(test1, test2)
-  #   p test1
-  #   p test2
-  # end
+
+  # Welcome new user.
   def self.welcome
     puts "~~~~~~~~"
     puts "Welcome to Austin's Alignment Assignment!"
@@ -10,6 +8,7 @@ module View
     self.get_info
   end
 
+  # Obtain and return user's Podio username and password (hidden)
   def self.get_info
     print "Please enter your Podio username: "
     username = gets.chomp
@@ -19,6 +18,7 @@ module View
     return [username, password]
   end
 
+  # Let user know the migration did nothing because it is already complete.
   def self.nothing_new
     puts "All items have already been copied over!"
   end

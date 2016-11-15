@@ -9,7 +9,8 @@ require 'unirest'
 require 'json'
 require 'date'
 
-
+# API keys loaded into ENV variables with respective names in file named secrets.rb
+# ID's of the from and to meeting apps loaded in right here
 Controller.new(view: View, 
                podio: Podio,
                parser: Parser,
