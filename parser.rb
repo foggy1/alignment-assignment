@@ -7,20 +7,20 @@ module Parser
 
   # For each item, go through the fields and obtain the minimum information necessary
   # in order to create a new item with the API.
-  # If the 'value' key is text or a number, retrieve that
-  # If the 'value' key has a 'start' or 'end' (and is thus a date), grab all date values
-  # Otherwise, the field value is buried in a text key, and we grab that text.
+  # According to the way Podio nests values in a given field type, retrieve that data.
   # Utilize uniq to remove identical objects now that they're comparable.
   def self.scrub(scrubable)
     scrubbed = scrubable["items"].map do |item|
       clean_args = {}
       clean_args["fields"] = {}
       item["fields"].each do |field|
-        if field["values"].first["value"].respond_to?(:downcase) || field["values"].first["value"].respond_to?(:round)
+        if field["type"] == "text" || 
+           field["type"] == "location" ||
+           field["type"] == "progress"
           clean_args["fields"][field["external_id"]] = field["values"].first["value"]
-        elsif field["values"].first["start"] || field["values"].first["end"]
+        elsif field["type"] == "date"
           clean_args["fields"][field["external_id"]] = field["values"].first
-        else
+        elsif field["type"] == "category"
           clean_args["fields"][field["external_id"]] = field["values"].first["value"]["text"]
         end
       end

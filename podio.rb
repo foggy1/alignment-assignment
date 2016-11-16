@@ -51,7 +51,7 @@ module Podio
     response = Unirest.post "https://api.podio.com/task/",
                 headers:{"Authorization" => "OAuth2 #{args.fetch(:token)}",
                             "Content-Type" => "application/json"},
-                parameters:{"text" => "Create Agenda for #{item["fields"]["meeting-title-text"].gsub(/<\/?[^>]*>/, "")}",
+                parameters:{"text" => "Create Agenda for #{args.fetch(:item)["fields"]["meeting-title-text"].gsub(/<\/?[^>]*>/, "")}",
                             "due_date" => (Date.parse(args.fetch(:item)["fields"]["time-date-of-meeting"]["end"]) - 7).to_s,
                             "ref_type" => "item",
                             "ref_id" => args.fetch(:ref_id)

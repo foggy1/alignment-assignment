@@ -12,11 +12,12 @@ class Controller
     run
   end
 
-  #  Get username password.  Get token.  
-  #  Inform user and end program if invalid username or password is provided.
-  #  Get items from origin app and destination app.
-  #  Make items from the difference between origin and destination app.
-  #  Inform user if nothing was made.
+  # Get username password.  Get token.  
+  # Inform user and end program if invalid username or password is provided.
+  # Get items from origin app and destination app.
+  # Scrub all items, removing duplicates, and filtering by 'Date confirmed' status.
+  # Make items from the difference between origin and destination app.
+  # Inform user if nothing was made.
   def run
     @username, @password = @view.welcome
     @access_token = @podio.get_token(client_id: @client_id,
@@ -29,6 +30,7 @@ class Controller
     @new_item_ids = @podio.make_items(count: @app_one_items.length, 
                                       items: @app_one_items - @app_two_items, 
                                       token: @access_token)
-    @view.nothing_new unless @new_item_ids
+    return @view.nothing_new unless @new_item_ids
+    @view.success((@app_one_items - @app_two_items).count)
   end
 end
