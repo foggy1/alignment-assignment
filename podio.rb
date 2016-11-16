@@ -1,6 +1,7 @@
 module Podio
 
   # Retrieves access token
+  # Returns error message if token retrieval fails
   def self.get_token(args={})
     response = Unirest.post "https://podio.com/oauth/token",
                  parameters:{:grant_type => "password",
@@ -9,7 +10,8 @@ module Podio
                   :password => args.fetch(:password),
                   :client_id => args.fetch(:client_id),
                   :client_secret => args.fetch(:client_secret)}
-    return response.body["access_token"]
+    return response.body if response.body["error"]
+    response.body["access_token"]
   end
 
   # Retrieves items from the Meetings app
@@ -17,7 +19,7 @@ module Podio
     response = Unirest.post "https://api.podio.com/item/app/#{app_id}/filter/",
                headers:{"Authorization" => "OAuth2 #{token}"},
                parameters:{:sort_desc => true}
-    return response.body
+    response.body
   end
 
   # Will only make items that are in app one and not also in app two.
@@ -49,7 +51,7 @@ module Podio
     response = Unirest.post "https://api.podio.com/task/",
                 headers:{"Authorization" => "OAuth2 #{args.fetch(:token)}",
                             "Content-Type" => "application/json"},
-                parameters:{"text" => "Create Agenda for #{item["fields"]["meeting-title-text"].gsub(/<\/?[^>]*>/, "")}",
+                parameters:{"text" => "Create Agenda for #{args.fetch(:item)["fields"]["meeting-title-text"].gsub(/<\/?[^>]*>/, "")}",
                             "due_date" => (Date.parse(args.fetch(:item)["fields"]["time-date-of-meeting"]["end"]) - 7).to_s,
                             "ref_type" => "item",
                             "ref_id" => args.fetch(:ref_id)

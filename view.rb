@@ -18,8 +18,19 @@ module View
     return [username, password]
   end
 
+  # Let user know if token was not retrieved due to incorrect username password.
+  def self.invalid_login(error_message)
+    puts "Could not obtain token. #{error_message}."
+  end
+
   # Let user know the migration did nothing because it is already complete.
   def self.nothing_new
     puts "All items have already been copied over!"
   end
+
+  # Let user know the program was a success and transferred things.
+  def self.success(item_count)
+    puts "#{item_count} item(s) successfully transferred!"
+  end
+  
 end
