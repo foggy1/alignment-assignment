@@ -12,12 +12,16 @@ class Controller
     run
   end
 
+  #  Get username password.  Get token.  Get items from origin app and destination app.
+  #  Make items from the difference between origin and destination app.
+  #  Inform user if nothing was made.
   def run
     @username, @password = @view.welcome
     @access_token = @podio.get_token(client_id: @client_id,
                      client_secret: @client_secret,
                      username: @username,
                      password: @password)
+    return @view.invalid_login(@access_token["error_description"]) if @access_token["error"]
     ugly_items = @app_ids.map{ |app_id| @podio.get_items(@access_token, app_id) }
     @app_one_items, @app_two_items = ugly_items.map { |scrubable| @parser.parse(scrubable) }
     @new_item_ids = @podio.make_items(count: @app_one_items.length, 
